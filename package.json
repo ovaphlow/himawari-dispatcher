@@ -1,0 +1,16 @@
+{
+  "name": "himawari-koa",
+  "version": "1.0.0",
+  "main": "app.js",
+  "repository": "https://github.com/ovaphlow/himawari-koa.git",
+  "author": "ovaphlow <ovaphlow@outlook.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.5.2",
+    "@koa/router": "^8.0.2",
+    "google-protobuf": "^3.10.0",
+    "grpc": "^1.24.0",
+    "koa": "^2.9.0",
+    "koa-bodyparser": "^4.2.1"
+  }
+}
