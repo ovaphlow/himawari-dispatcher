@@ -26,4 +26,8 @@ app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
 })
 
+const archiveRouter = require('./routes/archive')
+app.use(archiveRouter.routes())
+app.use(archiveRouter.allowedMethods())
+
 module.exports = app

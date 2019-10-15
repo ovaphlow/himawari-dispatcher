@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package archive;
+
+service Archive {
+    rpc search(ArchiveRequest) returns (ArchiveReply) {}
+}
+
+message ArchiveRequest { string data = 1; }
+
+message ArchiveReply { string data = 1; }
