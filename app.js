@@ -30,4 +30,8 @@ const archiveRouter = require('./routes/archive')
 app.use(archiveRouter.routes())
 app.use(archiveRouter.allowedMethods())
 
+const userRouter = require('./routes/user')
+app.use(userRouter.routes())
+app.use(userRouter.allowedMethods())
+
 module.exports = app
