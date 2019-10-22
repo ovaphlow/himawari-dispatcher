@@ -1,5 +1,5 @@
 {
-  "name": "himawari-koa",
+  "name": "himawari-dispatcher",
   "version": "1.0.0",
   "main": "app.js",
   "repository": "https://github.com/ovaphlow/himawari-koa.git",
