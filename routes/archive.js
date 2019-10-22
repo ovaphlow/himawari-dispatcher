@@ -46,7 +46,6 @@ router
       console.error(err)
       ctx.response.body = {message: '服务器错误'}
     }
-    // ctx.response.body = {message: ctx.request.body.keyword}
   })
 
 router
