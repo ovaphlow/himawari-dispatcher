@@ -9,6 +9,7 @@ service Archive {
     rpc save(ArchiveRequest) returns (ArchiveReply) {}
     rpc get(ArchiveRequest) returns (ArchiveReply) {}
     rpc update(ArchiveRequest) returns (ArchiveReply) {}
+    rpc remove(ArchiveRequest) returns (ArchiveReply) {}
 }
 
 message ArchiveRequest { string data = 1; }
