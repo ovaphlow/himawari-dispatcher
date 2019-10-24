@@ -30,6 +30,10 @@ const archiveRouter = require('./routes/archive')
 app.use(archiveRouter.routes())
 app.use(archiveRouter.allowedMethods())
 
+const deptRouter = require('./routes/dept')
+app.use(deptRouter.routes())
+app.use(deptRouter.allowedMethods())
+
 const userRouter = require('./routes/user')
 app.use(userRouter.routes())
 app.use(userRouter.allowedMethods())
