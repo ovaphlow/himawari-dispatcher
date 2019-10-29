@@ -5,21 +5,21 @@ const Router = require('@koa/router')
 const config = require('../config')
 
 const proto = grpc.loadPackageDefinition(
-  protoLoader.loadSync(__dirname + '/../protos/user.proto'), {
+  protoLoader.loadSync(__dirname + '/../protos/dept.proto'), {
     keepCase: true,
     longs: String,
     enums: String,
     defaults: true,
     oneofs: true
   }
-).user
-const grpcClient = new proto.User(
+).dept
+const grpcClient = new proto.Dept(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
   grpc.credentials.createInsecure()
 )
 
 const router = new Router({
-  prefix: '/api/user'
+  prefix: '/api/common/dept'
 })
 
 router
