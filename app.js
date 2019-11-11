@@ -38,4 +38,8 @@ const userRouter = require('./routes/user')
 app.use(userRouter.routes())
 app.use(userRouter.allowedMethods())
 
+const vaultRouter = require('./routes/vault')
+app.use(vaultRouter.routes())
+app.use(vaultRouter.allowedMethods())
+
 module.exports = app
