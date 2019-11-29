@@ -7,7 +7,9 @@ const app = new Koa()
 
 app.env = config.env
 
-app.use(bodyParser())
+app.use(bodyParser({
+  jsonLimit: '4mb'
+}))
 
 app.use(async (ctx, next) => {
   await next()
