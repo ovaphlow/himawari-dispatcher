@@ -5,6 +5,8 @@ package archive;
 service Archive {
     rpc search(ArchiveRequest) returns (ArchiveReply) {}
     rpc filter(ArchiveRequest) returns (ArchiveReply) {}
+    rpc checkValid(ArchiveRequest) returns (ArchiveReply) {}
+    rpc checkValidWithId(ArchiveRequest) returns (ArchiveReply) {}
 
     rpc list(ArchiveRequest) returns (ArchiveReply) {}
     rpc save(ArchiveRequest) returns (ArchiveReply) {}

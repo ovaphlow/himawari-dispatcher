@@ -47,8 +47,6 @@ router
       ctx.response.body = {message: '服务器错误'}
     }
   })
-
-router
   /**
    * 查询档案，返回结果最多2000条
    * 参数：档案号或身份证或姓名
@@ -57,6 +55,46 @@ router
     const grpcFetch = body => {
       return new Promise((resolve, reject) => {
         grpcClient.filter({data: JSON.stringify(body)}, (err, response) => {
+          if (err) {
+            console.error(err)
+            reject(err)
+            return
+          }
+          resolve(JSON.parse(response.data))
+        })
+      })
+    }
+    try {
+      ctx.response.body = await grpcFetch(ctx.request.body)
+    } catch (err) {
+      console.error(err)
+      ctx.response.body = {message: '服务器错误'}
+    }
+  })
+  .put('/check-valid', async ctx => {
+    const grpcFetch = body => {
+      return new Promise((resolve, reject) => {
+        grpcClient.checkValid({data: JSON.stringify(body)}, (err, response) => {
+          if (err) {
+            console.error(err)
+            reject(err)
+            return
+          }
+          resolve(JSON.parse(response.data))
+        })
+      })
+    }
+    try {
+      ctx.response.body = await grpcFetch(ctx.request.body)
+    } catch (err) {
+      console.error(err)
+      ctx.response.body = {message: '服务器错误'}
+    }
+  })
+  .put('/check-valid-with-id', async ctx => {
+    const grpcFetch = body => {
+      return new Promise((resolve, reject) => {
+        grpcClient.checkValidWithId({data: JSON.stringify(body)}, (err, response) => {
           if (err) {
             console.error(err)
             reject(err)
