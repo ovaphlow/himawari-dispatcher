@@ -14,6 +14,8 @@ service Archive {
     rpc update(ArchiveRequest) returns (ArchiveReply) {}
     rpc remove(ArchiveRequest) returns (ArchiveReply) {}
 
+    rpc transferOut(ArchiveRequest) returns (ArchiveReply) {}
+
     rpc listPicture(ArchiveRequest) returns (ArchiveReply) {}
     rpc saveBase64(ArchiveRequest) returns (ArchiveReply) {}
     rpc getPicture(ArchiveRequest) returns (ArchiveReply) {}
