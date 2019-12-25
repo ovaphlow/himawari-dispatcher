@@ -15,10 +15,16 @@ service Archive {
     rpc remove(ArchiveRequest) returns (ArchiveReply) {}
 
     rpc transferOut(ArchiveRequest) returns (ArchiveReply) {}
+    rpc transferIn(ArchiveRequest) returns (ArchiveReply) {}
 
     rpc listPicture(ArchiveRequest) returns (ArchiveReply) {}
     rpc saveBase64(ArchiveRequest) returns (ArchiveReply) {}
     rpc getPicture(ArchiveRequest) returns (ArchiveReply) {}
+
+    rpc listIsolate(ArchiveRequest) returns (ArchiveReply) {}
+    rpc getIsolate(ArchiveRequest) returns (ArchiveReply) {}
+    rpc updateIsolate(ArchiveRequest) returns (ArchiveReply) {}
+    rpc removeIsolate(ArchiveRequest) returns (ArchiveReply) {}
 }
 
 message ArchiveRequest { string data = 1; }
