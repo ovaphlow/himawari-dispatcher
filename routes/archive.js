@@ -48,10 +48,6 @@ router
     let resp = {message: '', content: ''}
     const loop = async (data, i) => {
       if (data.length < i + 1) return
-      if (!!!data[i].sn || !!!data[i].identity || !!!data[i].name) {
-        resp.message = `缺少关键数据，档案号：${archive.sn}，身份证：${archive.identity}，姓名：${archive.name}`
-        return
-      }
       const archive = {
         sn: data[i][1],
         sn_alt: '',
@@ -64,8 +60,12 @@ router
         yutuixiuriqi: '',
         tuixiuriqi: '',
         remark: data[i][6],
-        vault_id: 0,
+        vault_id: ctx.request.body.vault_id,
         phone: data[i][5],
+      }
+      if (!!!archive.sn || !!!archive.identity || !!!archive.name) {
+        resp.message = `缺少关键数据，档案号：${archive.sn}，身份证：${archive.identity}，姓名：${archive.name}`
+        return
       }
       const res = await grpcFetch(archive)
       if (res.message) {
