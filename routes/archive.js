@@ -1,6 +1,10 @@
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader')
 const Router = require('@koa/router')
+const multer = require('@koa/multer')
+const xlsx = require('node-xlsx')
+
+const upload = multer()
 
 const config = require('../config')
 
@@ -22,6 +26,57 @@ const grpcClient = new proto.Archive(
 const router = new Router({
   prefix: '/api/archive'
 })
+
+router
+  .post('/import-data', upload.single('file'), async ctx => {
+    const grpcFetch = body => {
+      return new Promise((resolve, reject) => {
+        grpcClient.save({data: JSON.stringify(body)}, (err, response) => {
+          if (err) {
+            console.error(err)
+            reject(err)
+            return
+          }
+          resolve(JSON.parse(response.data))
+        })
+      })
+    }
+
+    // console.info('ctx.request.file', ctx.request.file)
+    const sheets = xlsx.parse(ctx.request.file.buffer)
+    const data = sheets[0].data
+    let resp = {message: '', content: ''}
+    const loop = async (data, i) => {
+      if (data.length < i + 1) return
+      if (!!!data[i].sn || !!!data[i].identity || !!!data[i].name) {
+        resp.message = `缺少关键数据，档案号：${archive.sn}，身份证：${archive.identity}，姓名：${archive.name}`
+        return
+      }
+      const archive = {
+        sn: data[i][1],
+        sn_alt: '',
+        identity: data[i][3],
+        name: data[i][2],
+        birthday: data[i][4],
+        cangongshijian: '',
+        zhicheng: '',
+        gongling: '',
+        yutuixiuriqi: '',
+        tuixiuriqi: '',
+        remark: data[i][6],
+        vault_id: 0,
+        phone: data[i][5],
+      }
+      const res = await grpcFetch(archive)
+      if (res.message) {
+        resp.message = `导入数据时发生错误，档案号：${archive.sn}，身份证：${archive.identity}，姓名：${archive.name}`
+        return
+      }
+      loop(data, i + 1)
+    }
+    loop(data, 1)
+    ctx.response.body = resp
+  })
 
 router
   /**
