@@ -173,6 +173,26 @@ router
       ctx.response.body = {message: '服务器错误'}
     }
   })
+  .put('/isolate/filter', async ctx => {
+    const grpcFetch = body => {
+      return new Promise((resolve, reject) => {
+        grpcClient.filterIsolate({data: JSON.stringify(body)}, (err, response) => {
+          if (err) {
+            console.error(err)
+            reject(err)
+            return
+          }
+          resolve(JSON.parse(response.data))
+        })
+      })
+    }
+    try {
+      ctx.response.body = await grpcFetch(ctx.request.body)
+    } catch (err) {
+      console.error(err)
+      ctx.response.body = {message: '服务器错误'}
+    }
+  })
   .get('/isolate/:id', async ctx => {
     const grpcFetch = body => {
       return new Promise((resolve, reject) => {

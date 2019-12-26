@@ -25,6 +25,7 @@ service Archive {
     rpc getIsolate(ArchiveRequest) returns (ArchiveReply) {}
     rpc updateIsolate(ArchiveRequest) returns (ArchiveReply) {}
     rpc removeIsolate(ArchiveRequest) returns (ArchiveReply) {}
+    rpc filterIsolate(ArchiveRequest) returns (ArchiveReply) {}
 }
 
 message ArchiveRequest { string data = 1; }
