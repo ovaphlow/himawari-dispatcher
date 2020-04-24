@@ -4,15 +4,16 @@ const Router = require('@koa/router')
 
 const config = require('../config')
 
-const proto = grpc.loadPackageDefinition(
-  protoLoader.loadSync(__dirname + '/../protos/dept.proto'), {
-    keepCase: true,
-    longs: String,
-    enums: String,
-    defaults: true,
-    oneofs: true
-  }
-).dept
+// 20200424
+// 根据官方示例更新grpc的声明过程
+const packageDefinition = protoLoader.loadSync(__dirname + '/../protos/dept.proto', {
+  keepCase: true,
+  longs: String,
+  enums: String,
+  defaults: true,
+  oneofs: true
+})
+const proto = grpc.loadPackageDefinition(packageDefinition).dept
 const grpcClient = new proto.Dept(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
   grpc.credentials.createInsecure()
@@ -21,6 +22,72 @@ const grpcClient = new proto.Dept(
 const router = new Router({
   prefix: '/api/common/dept'
 })
+
+module.exports = router
+
+router
+  .get('/:id', async ctx => {
+    const grpcFetch = body => {
+      return new Promise((resolve, reject) => {
+        grpcClient.get({data: JSON.stringify(body)}, (err, response) => {
+          if (err) {
+            console.error(err)
+            reject(err)
+            return
+          }
+          resolve(JSON.parse(response.data))
+        })
+      })
+    }
+    try {
+      ctx.response.body = await grpcFetch(ctx.params)
+    } catch (err) {
+      console.error(err)
+      ctx.response.body = {message: '服务器错误'}
+    }
+  })
+  .put('/:id', async ctx => {
+    const grpcFetch = body => {
+      return new Promise((resolve, reject) => {
+        grpcClient.update({data: JSON.stringify(body)}, (err, response) => {
+          if (err) {
+            console.error(err)
+            reject(err)
+            return
+          }
+          resolve(JSON.parse(response.data))
+        })
+      })
+    }
+    try {
+      ctx.response.body = await grpcFetch(Object.assign({
+        id: parseInt(ctx.params.id)
+      }, ctx.request.body))
+    } catch (err) {
+      console.error(err)
+      ctx.response.body = {message: '服务器错误'}
+    }
+  })
+  .delete('/:id', async ctx => {
+    const grpcFetch = body => {
+      return new Promise((resolve, reject) => {
+        grpcClient.remove({data: JSON.stringify(body)}, (err, response) => {
+          if (err) {
+            console.error(err)
+            reject(err)
+            return
+          }
+          resolve(JSON.parse(response.data))
+        })
+      })
+    }
+    try {
+      ctx.response.body = await grpcFetch(ctx.params)
+    } catch (err) {
+      console.error(err)
+      ctx.response.body = {message: '服务器错误'}
+    }
+  })
 
 router
   .get('/', async ctx => {
@@ -63,67 +130,3 @@ router
       ctx.response.body = {message: '服务器错误'}
     }
   })
-
-router
-  .get('/:id', async ctx => {
-    const grpcFetch = body => {
-      return new Promise((resolve, reject) => {
-        grpcClient.get({data: JSON.stringify(body)}, (err, response) => {
-          if (err) {
-            console.error(err)
-            reject(err)
-            return
-          }
-          resolve(JSON.parse(response.data))
-        })
-      })
-    }
-    try {
-      ctx.response.body = await grpcFetch(ctx.params)
-    } catch (err) {
-      console.error(err)
-      ctx.response.body = {message: '服务器错误'}
-    }
-  })
-  .put('/:id', async ctx => {
-    const grpcFetch = body => {
-      return new Promise((resolve, reject) => {
-        grpcClient.update({data: JSON.stringify(body)}, (err, response) => {
-          if (err) {
-            console.error(err)
-            reject(err)
-            return
-          }
-          resolve(JSON.parse(response.data))
-        })
-      })
-    }
-    try {
-      ctx.response.body = await grpcFetch(ctx.request.body)
-    } catch (err) {
-      console.error(err)
-      ctx.response.body = {message: '服务器错误'}
-    }
-  })
-  .delete('/:id', async ctx => {
-    const grpcFetch = body => {
-      return new Promise((resolve, reject) => {
-        grpcClient.remove({data: JSON.stringify(body)}, (err, response) => {
-          if (err) {
-            console.error(err)
-            reject(err)
-            return
-          }
-          resolve(JSON.parse(response.data))
-        })
-      })
-    }
-    try {
-      ctx.response.body = await grpcFetch(ctx.params)
-    } catch (err) {
-      console.error(err)
-      ctx.response.body = {message: '服务器错误'}
-    }
-  })
-
-module.exports = router
