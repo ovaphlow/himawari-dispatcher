@@ -8,24 +8,24 @@ const upload = multer()
 
 const config = require('../config')
 
-const proto = grpc.loadPackageDefinition(
-  protoLoader.loadSync(__dirname + '/../protos/archive.proto'), {
-    keepCase: true,
-    longs: String,
-    enums: String,
-    defaults: true,
-    oneofs: true
-  }
-).archive
+const packageDefinition = protoLoader.loadSync(__dirname + '/../protos/archive.proto', {
+  keepCase: true,
+  longs: String,
+  enums: String,
+  defaults: true,
+  oneofs: true
+})
+const proto = grpc.loadPackageDefinition(packageDefinition).archive
 const grpcClient = new proto.Archive(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
-  grpc.credentials.createInsecure(),
-  config.grpcServer.settings
+  grpc.credentials.createInsecure()
 )
 
 const router = new Router({
   prefix: '/api/archive'
 })
+
+module.exports = router
 
 router
   .post('/import-data', upload.single('file'), async ctx => {
@@ -473,5 +473,3 @@ router
       ctx.response.body = {message: '服务器错误'}
     }
   })
-
-module.exports = router
