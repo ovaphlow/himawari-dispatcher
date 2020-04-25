@@ -405,7 +405,9 @@ router
       })
     }
     try {
-      ctx.response.body = await grpcFetch(ctx.request.body)
+      ctx.response.body = await grpcFetch(Object.assign({
+        id: parseInt(ctx.params.id)
+      }, ctx.request.body))
     } catch (err) {
       console.error(err)
       ctx.response.body = {message: '服务器错误'}
